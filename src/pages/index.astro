@@ -11,45 +11,55 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
 const cactusTech: Array<{ title: string; desc: string; href: string }> = [
 	{
+		title: "Typescript",
+		desc: "for the type safety and developer experience.",
+		href: "https://www.typescriptlang.org/",
+	},
+	{
+		title: "NodeJS",
+		desc: "for the backend. (Maybe will switch to Bun :p)",
+		href: "https://nodejs.org/en/",
+	},
+	{
+		title: "React",
+		desc: "for the frontend.",
+		href: "https://reactjs.org/",
+	},
+	{
 		title: "Astro",
-		desc: "Build fast websites, faster.",
-		href: "https://astro.build",
+		desc: "for the static site generation. mostly websites.",
+		href: "https://astro.build/",
 	},
 	{
-		title: "Astro Assets",
-		desc: "Built-in optimized asset support.",
-		href: "https://docs.astro.build/en/guides/assets/",
+		title: "React Native",
+		desc: "for the mobile app.",
+		href: "https://reactnative.dev/",
 	},
 	{
-		title: "Tailwind CSS",
-		desc: "Rapidly build modern websites without ever leaving your HTML.",
-		href: "https://tailwindcss.com",
+		title: "NextJS",
+		desc: "for the server side rendering. (Still prefer SPA)",
+		href: "https://nextjs.org/",
 	},
 	{
-		title: "Markdown",
-		desc: "Simple and easy-to-use markup language.",
-		href: "https://www.markdownguide.org/",
+		title: "AWS",
+		desc: "for the cloud infrastructure.",
+		href: "https://aws.amazon.com/",
 	},
 	{
-		title: "MDX",
-		desc: "Markdown for the component era.",
-		href: "https://mdxjs.com/",
+		title: "Python",
+		desc: "for scripting",
+		href: "https://www.python.org/",
 	},
-	{
-		title: "Satori",
-		desc: "Generating png Open Graph images for blog posts.",
-		href: "https://github.com/vercel/satori",
-	},
-	{
-		title: "Pagefind",
-		desc: "A fully static search library.",
-		href: "https://pagefind.app/",
-	},
-	{
-		title: "Astro Icon",
-		desc: "An easy to use Icon component for Astro.",
-		href: "https://github.com/natemoo-re/astro-icon#readme",
-	},
+  {
+    title: "MySQL",
+    desc: "for the relational database.",
+    href: "https://www.mysql.com/",
+  },
+  {
+    title: "DynamoDB",
+    desc: "for the document database.",
+    href: "https://aws.amazon.com/dynamodb/",
+  }
 ];
 ---
 
@@ -57,9 +67,9 @@ const cactusTech: Array<{ title: string; desc: string; href: string }> = [
 	<section>
 		<h1 class="title mb-6">Hello World!</h1>
 		<p class="mb-4">
-			Hi, I’m a theme for Astro, an example of how you can use this starter to create a personal
-			blog. If you want to know more about how you can customise me, add more posts, and make it
-			your own, click on one the github icon link below which will take you to my repo.
+			Hello, I am Shkumbin Hasani, a software engineer from Kosovo. I am
+      currently working at Dua.com as a Full Stack Developer. I am passionate
+      about building software that is scalable, maintainable, and reliable.
 		</p>
 		<SocialList />
 	</section>
@@ -88,7 +98,7 @@ const cactusTech: Array<{ title: string; desc: string; href: string }> = [
 							class="cactus-link inline-block"
 						>
 							{title}
-						</a>: 
+						</a>:
 						<p class="inline-block sm:mt-2">{desc}</p>
 					</li>
 				))
