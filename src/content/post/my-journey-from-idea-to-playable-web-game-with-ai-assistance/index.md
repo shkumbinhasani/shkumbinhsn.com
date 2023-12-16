@@ -24,21 +24,21 @@ Unlike my usual project approach, I embarked on this challenge with minimal know
 ## From Blueprint to Game
 
 With the foundation laid, the game was far from finished - it was merely a grid with player tokens. Enter CopilotChat, a service by GitHub I accessed via WebStorm, my preferred IDE. The development unfolded in iterations: highlighting possible moves, defining player turns, enabling player movement, and integrating wall placements and orientations.
-![img_1.png](img_1.png)
+![img_1.png](./img_1.png)
 
 The real challenge was ensuring that a player's path to the opposite side remained unblocked - a complex logic puzzle. CopilotChat provided guidance, but manual adjustments were necessary.
 
-![img_3.png](img_3.png)
+![img_3.png](./img_3.png)
 ## A Playable Prototype
 
 Four hours in, the game transformed from a concept to a playable prototype, a remarkable feat given my lack of prior game development experience. But I didn't stop there.
-![img_4.png](img_4.png)
+![img_4.png](./img_4.png)
 
 ## Going Multiplayer
 
 My next goal? Multiplayer functionality. Initially, I considered a server-based approach with WebSockets, but instead, I opted for simplicity using peer.js for a WebRTC peer-to-peer connection. The result? A game where movements are shared between players through WebSocket, admittedly without robust security - but perfect for a fun, experimental project.
 
-![img_5.png](img_5.png)
+![img_5.png](./img_5.png)
 
 ## The Final Product
 
