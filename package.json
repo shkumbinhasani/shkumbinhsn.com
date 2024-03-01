@@ -30,7 +30,7 @@
 		"mdast-util-to-string": "^4.0.0",
 		"pagefind": "^0.12.0",
 		"postcss": "^8.4.29",
-		"postcss-html": "^1.5.0",
+		"postcss-html": "^1.6.0",
 		"postcss-import": "^15.1.0",
 		"prettier": "^3.0.3",
 		"prettier-plugin-astro": "0.12.0",
