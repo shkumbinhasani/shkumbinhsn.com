@@ -22,14 +22,15 @@ A server that I end up neglecting, a database, requests, etc. Is all this really
 
 At that moment, I remembered IndexedDB. I had never actually seen code using it or encountered any API for it; I just knew it existed. I started researching it, and holy shit—the API is terrible. It's so fu*%&#ng terrible. As someone who wanted to use Drizzle and loved their API, this was complete dog shit.
 
-<img src="./img.png" alt="Wow this code is terrible" style="max-width: 400px;">
+![Wow this code is terrible](./img.png)
+
 
 But I still liked the idea of a browser having its own database that can handle data efficiently, so I started looking for a wrapper around it. That’s when I found:
 
 # Dexie.js
 Dexie seems like the solution I was searching for—a Drizzle-like API for a browser database that is efficient. This is how the API looks:
 
-<img src="./img_1.png" alt="Code example for Dexie.js" style="max-width: 700px">
+![Code example for Dexie.js](./img_1.png)
 
 Or for us TypeScript lovers:
 
@@ -74,7 +75,7 @@ So that's how I was going to do it. Since it’s asynchronous, I thought all I n
 # Or do I?
 Not really. Dexie also has a React hook called useLiveQuery, which allows you to write a query in a hook, and it will auto-update if any data inside updates. 🤯 It feels like magic working like this.
 
-<img src="./img_2.png" alt="example of useLiveQuery" style="max-width: 400px">
+![example of useLiveQuery](./img_2.png)
 
 Under the hood, I _*assume*_ that once a query happens, it tells an async local storage that the hook uses a certain table, then it subscribes to changes on that table and reruns the query. But this was one of the best developer experiences I’ve had in a while. Combined with the auto-generated UI from v0/Claude and the amazing router of Tanstack, I was able to finish the project in a couple of hours.
 
