@@ -4,7 +4,7 @@ description: "Have you ever needed to display a list of tags or elements in a si
 publishDate: "03 Sep 2024"
 updatedDate:  "03 Sep 2024"
 coverImage:
-  src: "./for_revered_non.png"
+  src: "./for_revered_anon.png"
   alt: "Man refusing to use a database"
 tags: ["Database", "Full-Stack", "IndexedDB"]
 ---
@@ -81,7 +81,7 @@ Under the hood, I _*assume*_ that once a query happens, it tells an async local 
 # Did I actually solve an issue?
 Nope, not really. Even though it was working perfectly and looking perfect, the user wanted to be able to collaborate, view the products across devices, etc. So, Google Sheets was still a better solution than mine.
 
-![img_3.png](img_3.png)
+![./img_3.png](./img_3.png)
 
 # Conclusions & What would be good
 
