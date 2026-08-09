@@ -1,27 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@source "../../src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}";
+
+/* Replaces `darkMode: "class"` from the v3 JS config. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * `inline` so utilities emit `hsl(var(--theme-*))` directly rather than going
+ * through an intermediate variable. This keeps the light/dark swap working when
+ * `.dark` redefines the `--theme-*` values below.
+ */
+@theme inline {
+	--color-bgColor: hsl(var(--theme-bg));
+	--color-textColor: hsl(var(--theme-text));
+	--color-textMuted: hsl(var(--theme-text-muted));
+	--color-accent: hsl(var(--theme-accent));
+	--color-borderColor: hsl(var(--theme-border));
+
+	--font-sans:
+		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, ui-sans-serif, sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
 
 @layer base {
 	:root {
 		color-scheme: light;
-		/* https://tailwindcss.com/docs/customizing-colors#using-css-variables */
-		--theme-bg: 0deg 0% 98%;
-		--theme-link: 172deg 18% 41%;
-		--theme-text: 203deg 11% 15%;
-		--theme-accent: 351deg 66% 48%;
-		--theme-accent-2: 0deg 0% 7%;
-		--theme-quote: 351deg 66% 48%;
+		--theme-bg: 0deg 0% 99%;
+		--theme-text: 0deg 0% 12%;
+		--theme-text-muted: 0deg 0% 45%;
+		--theme-accent: 142deg 71% 45%;
+		--theme-border: 0deg 0% 90%;
 	}
 
 	:root.dark {
 		color-scheme: dark;
-		--theme-bg: 210deg 6% 12%;
-		--theme-link: 330deg 49% 67%;
-		--theme-text: 220deg 3% 79%;
-		--theme-accent: 159deg 64% 45%;
-		--theme-accent-2: 0deg 0% 93%;
-		--theme-quote: 102deg 100% 86%;
+		--theme-bg: 0deg 0% 7%;
+		--theme-text: 0deg 0% 95%;
+		--theme-text-muted: 0deg 0% 55%;
+		--theme-accent: 142deg 71% 45%;
+		--theme-border: 0deg 0% 20%;
 	}
 
 	html {
@@ -29,6 +47,97 @@
 	}
 
 	html body {
-		@apply mx-auto flex min-h-screen max-w-3xl flex-col bg-bgColor px-8 pt-16 font-mono text-sm font-normal text-textColor antialiased;
+		@apply mx-auto flex min-h-screen max-w-5xl flex-col bg-bgColor px-6 py-8 text-base font-normal text-textColor antialiased;
+		font-family:
+			system-ui,
+			-apple-system,
+			BlinkMacSystemFont,
+			"Segoe UI",
+			Roboto,
+			sans-serif;
+		line-height: 1.6;
 	}
+}
+
+@layer components {
+	.section-spacing {
+		@apply py-16 md:py-24;
+	}
+
+	.btn-primary {
+		@apply inline-flex items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-medium text-white transition-all hover:opacity-90;
+	}
+
+	.btn-secondary {
+		@apply inline-flex items-center justify-center rounded-lg border border-borderColor px-6 py-3 text-sm font-medium text-textColor transition-all hover:border-textMuted;
+	}
+
+	.card {
+		@apply rounded-xl border border-borderColor p-6 transition-all hover:border-textMuted;
+	}
+}
+
+/*
+ * Typography overrides, previously the `typography` key of the v3 JS config.
+ * Deliberately unlayered so they win over the plugin's layered defaults.
+ */
+.prose {
+	--tw-prose-body: hsl(var(--theme-text));
+	--tw-prose-headings: hsl(var(--theme-text));
+	--tw-prose-links: hsl(var(--theme-accent));
+	--tw-prose-bold: hsl(var(--theme-text));
+	--tw-prose-bullets: hsl(var(--theme-text-muted));
+	--tw-prose-quotes: hsl(var(--theme-text-muted));
+	--tw-prose-code: hsl(var(--theme-text));
+	--tw-prose-hr: hsl(var(--theme-border));
+	--tw-prose-th-borders: hsl(var(--theme-border));
+}
+
+.prose a {
+	color: hsl(var(--theme-accent));
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.prose a:hover {
+	text-decoration: underline;
+}
+
+.prose strong {
+	font-weight: 600;
+}
+
+/*
+ * Inline code only. `:not(pre) >` is required because these rules are unlayered
+ * and would otherwise override the typography plugin's `pre code` reset,
+ * putting a light background behind the Shiki-highlighted code blocks.
+ */
+.prose :not(pre) > code {
+	background-color: hsl(var(--theme-border));
+	border-radius: 4px;
+	padding: 2px 6px;
+	font-weight: 400;
+}
+
+.prose code::before,
+.prose code::after {
+	content: "";
+}
+
+.prose blockquote {
+	border-left-color: hsl(var(--theme-accent));
+	font-style: normal;
+}
+
+.prose hr {
+	border-color: hsl(var(--theme-border));
+}
+
+.prose thead th {
+	font-weight: 600;
+	border-bottom-color: hsl(var(--theme-border));
+}
+
+.prose tbody tr {
+	border-bottom-color: hsl(var(--theme-border));
 }

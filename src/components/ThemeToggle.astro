@@ -5,21 +5,16 @@
 			const button = this.querySelector("button") as HTMLButtonElement;
 
 			if (button) {
-				// button clicked, fire event
 				button.addEventListener("click", (e) => {
 					if (e.currentTarget instanceof HTMLButtonElement) {
-						// isPressed === dark mode current on
 						let isPressed = e.currentTarget.getAttribute("aria-pressed") === "true";
 
-						// invert isPressed
 						let themeChangeEvent = new CustomEvent("theme-change", {
 							detail: {
 								theme: isPressed ? "light" : "dark",
 							},
 						});
-						// dispatch event -> ThemeProvider.astro
 						document.dispatchEvent(themeChangeEvent);
-						// toggle the aria-pressed attribute
 						button.setAttribute("aria-pressed", String(!isPressed));
 					}
 				});
@@ -30,16 +25,16 @@
 	customElements.define("theme-toggle", ThemeToggle);
 </script>
 
-<theme-toggle class="ms-2 sm:ms-4">
+<theme-toggle>
 	<button
 		type="button"
 		id="toggle-theme"
-		class="group relative h-9 w-9 rounded-md p-2 ring-zinc-400 transition-all hover:ring-2"
+		class="group relative flex h-8 w-8 items-center justify-center rounded-md text-textMuted transition-colors hover:text-textColor"
 		aria-label="Toggle Dark Mode"
 	>
 		<svg
 			id="sun-svg"
-			class="absolute start-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-pressed:scale-100 group-aria-pressed:opacity-100"
+			class="absolute h-5 w-5 scale-0 opacity-0 transition-all group-aria-pressed:scale-100 group-aria-pressed:opacity-100"
 			aria-hidden="true"
 			focusable="false"
 			stroke-width="1.5"
@@ -52,25 +47,18 @@
 				stroke="currentColor"
 				stroke-linecap="round"
 				stroke-linejoin="round"></path>
-			<path d="M22 12L23 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-			></path>
+			<path d="M22 12L23 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
 			<path d="M12 2V1" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-			<path d="M12 23V22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-			></path>
-			<path d="M20 20L19 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-			></path>
-			<path d="M20 4L19 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-			></path>
-			<path d="M4 20L5 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-			></path>
-			<path d="M4 4L5 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-			></path>
-			<path d="M1 12L2 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-			></path>
+			<path d="M12 23V22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+			<path d="M20 20L19 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+			<path d="M20 4L19 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+			<path d="M4 20L5 19" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+			<path d="M4 4L5 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+			<path d="M1 12L2 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
 		</svg>
 		<svg
 			id="moon-svg"
-			class="absolute start-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-[pressed=false]:scale-100 group-aria-[pressed=false]:opacity-100"
+			class="absolute h-5 w-5 scale-0 opacity-0 transition-all group-aria-[pressed=false]:scale-100 group-aria-[pressed=false]:opacity-100"
 			aria-hidden="true"
 			focusable="false"
 			stroke-width="1.5"
@@ -78,30 +66,14 @@
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle>
 			<path
-				d="M7.63262 3.06689C8.98567 3.35733 9.99999 4.56025 9.99999 6.00007C9.99999 7.65693 8.65685 9.00007 6.99999 9.00007C5.4512 9.00007 4.17653 7.82641 4.01685 6.31997"
-				stroke="currentColor"
-				stroke-width="1.5"></path>
-			<path
-				d="M22 13.0505C21.3647 12.4022 20.4793 12 19.5 12C17.567 12 16 13.567 16 15.5C16 17.2632 17.3039 18.7219 19 18.9646"
-				stroke="currentColor"
-				stroke-width="1.5"></path>
-			<path
-				d="M14.5 8.51L14.51 8.49889"
-				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"></path>
-			<path
-				d="M10 17C11.1046 17 12 16.1046 12 15C12 13.8954 11.1046 13 10 13C8.89543 13 8 13.8954 8 15C8 16.1046 8.89543 17 10 17Z"
-				stroke="currentColor"
-				stroke-linecap="round"
-				stroke-linejoin="round"></path>
+				d="M21.0672 11.8568L20.4253 11.469L21.0672 11.8568ZM12.1432 2.93276L11.7553 2.29085V2.29085L12.1432 2.93276ZM21.25 12C21.25 17.1086 17.1086 21.25 12 21.25V22.75C17.9371 22.75 22.75 17.9371 22.75 12H21.25ZM12 21.25C6.89137 21.25 2.75 17.1086 2.75 12H1.25C1.25 17.9371 6.06294 22.75 12 22.75V21.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75V1.25C6.06294 1.25 1.25 6.06294 1.25 12H2.75ZM15.5 14.25C12.3244 14.25 9.75 11.6756 9.75 8.5H8.25C8.25 12.5041 11.4959 15.75 15.5 15.75V14.25ZM20.4253 11.469C19.4172 13.1373 17.5882 14.25 15.5 14.25V15.75C18.1349 15.75 20.4407 14.3439 21.7092 12.2447L20.4253 11.469ZM9.75 8.5C9.75 6.41182 10.8627 4.5828 12.531 3.57467L11.7553 2.29085C9.65609 3.5593 8.25 5.86509 8.25 8.5H9.75ZM12 2.75C11.9115 2.75 11.8077 2.71008 11.7324 2.63168C11.6686 2.56527 11.6538 2.50244 11.6503 2.47703C11.6461 2.44587 11.6482 2.35557 11.7553 2.29085L12.531 3.57467C13.0342 3.27065 13.196 2.71398 13.1368 2.27627C13.0754 1.82126 12.7166 1.25 12 1.25V2.75ZM21.7092 12.2447C21.6444 12.3518 21.5541 12.3539 21.523 12.3497C21.4976 12.3462 21.4347 12.3314 21.3683 12.2676C21.2899 12.1923 21.25 12.0885 21.25 12H22.75C22.75 11.2834 22.1787 10.9246 21.7237 10.8632C21.286 10.804 20.7293 10.9658 20.4253 11.469L21.7092 12.2447Z"
+				fill="currentColor"
+			></path>
 		</svg>
 	</button>
 </theme-toggle>
 
-{/* Inlined to avoid FOUC on full page load, runs once to set initial attribute */}
 <script is:inline>
 	const button = document.getElementById("toggle-theme");
 

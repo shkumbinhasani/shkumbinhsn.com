@@ -1,108 +1,117 @@
 ---
 import { getCollection } from "astro:content";
 import PageLayout from "@/layouts/Base";
-import PostPreview from "@/components/blog/PostPreview";
-import SocialList from "@/components/SocialList";
 import { sortMDByDate } from "@/utils";
 
-const MAX_POSTS = 10;
+const MAX_POSTS = 4;
 const allPosts = await getCollection("post");
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS);
 
-const cactusTech: Array<{ title: string; desc: string; href: string }> = [
+const expertise = [
 	{
-		title: "Typescript",
-		desc: "for the type safety and developer experience.",
-		href: "https://www.typescriptlang.org/",
+		title: "Full-Stack Development",
+		description: "Building end-to-end applications with TypeScript, React, and Node.js that scale.",
 	},
 	{
-		title: "NodeJS",
-		desc: "for the backend. (Maybe will switch to Bun :p)",
-		href: "https://nodejs.org/en/",
+		title: "Cloud Infrastructure",
+		description: "Designing and deploying on AWS with focus on reliability and cost efficiency.",
 	},
 	{
-		title: "React",
-		desc: "for the frontend.",
-		href: "https://reactjs.org/",
+		title: "Mobile Development",
+		description: "Creating cross-platform mobile apps with React Native that feel native.",
 	},
-	{
-		title: "Astro",
-		desc: "for the static site generation. mostly websites.",
-		href: "https://astro.build/",
-	},
-	{
-		title: "React Native",
-		desc: "for the mobile app.",
-		href: "https://reactnative.dev/",
-	},
-	{
-		title: "NextJS",
-		desc: "for the server side rendering. (Still prefer SPA)",
-		href: "https://nextjs.org/",
-	},
-	{
-		title: "AWS",
-		desc: "for the cloud infrastructure.",
-		href: "https://aws.amazon.com/",
-	},
-	{
-		title: "Python",
-		desc: "for scripting",
-		href: "https://www.python.org/",
-	},
-  {
-    title: "MySQL",
-    desc: "for the relational database.",
-    href: "https://www.mysql.com/",
-  },
-  {
-    title: "DynamoDB",
-    desc: "for the document database.",
-    href: "https://aws.amazon.com/dynamodb/",
-  }
 ];
+
+const companies = ["Pluto Labs LLC"];
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<section>
-		<h1 class="title mb-6">Hello World!</h1>
-		<p class="mb-4">
-			Hello, I am Shkumbin Hasani, a software engineer from Kosovo. I am
-      currently working at Dua.com as a Full Stack Developer. I am passionate
-      about building software that is scalable, maintainable, and reliable.
+	<!-- Hero Section - Above the fold -->
+	<section class="flex min-h-[70vh] flex-col justify-center py-12">
+		<p class="mb-4 text-sm font-medium text-accent">Software Engineer</p>
+		<h1 class="mb-6 text-4xl font-semibold leading-tight tracking-tight md:text-5xl lg:text-6xl">
+			I build software that <br />
+			<span class="text-textMuted">works and scales.</span>
+		</h1>
+		<p class="mb-8 max-w-xl text-lg text-textMuted">
+			Full-stack engineer based in Kosovo with 9+ years of experience turning ideas into production-ready applications.
 		</p>
-		<SocialList />
+		<div class="flex flex-wrap gap-4">
+			<a href="mailto:contact@shkumbinhsn.com" class="btn-primary">
+				Get in touch
+			</a>
+			<a href="/posts/" class="btn-secondary">
+				Read my writing
+			</a>
+		</div>
 	</section>
-	<section aria-label="Blog post list" class="mt-16">
-		<h2 class="title mb-4 text-xl">Posts</h2>
-		<ul class="space-y-4 sm:space-y-2">
+
+	<!-- Social Proof -->
+	<section class="border-y border-borderColor py-8">
+		<p class="text-sm text-textMuted">
+			Currently building at <span class="font-medium text-textColor">{companies[0]}</span>
+		</p>
+	</section>
+
+	<!-- Value Props - 3 cards max -->
+	<section class="section-spacing">
+		<h2 class="mb-12 text-2xl font-semibold">What I do</h2>
+		<div class="grid gap-8 md:grid-cols-3">
 			{
-				allPostsByDate.map((p) => (
-					<li class="flex flex-col gap-x-2 sm:flex-row">
-						<PostPreview post={p} />
-					</li>
+				expertise.map(({ title, description }) => (
+					<div class="space-y-3">
+						<h3 class="font-medium text-textColor">{title}</h3>
+						<p class="text-sm text-textMuted">{description}</p>
+					</div>
 				))
 			}
-		</ul>
+		</div>
 	</section>
-	<section class="mt-16">
-		<h2 class="title mb-4 text-xl">Technologies</h2>
-		<ul class="space-y-4 sm:space-y-2">
+
+	<!-- Recent Writing -->
+	<section class="section-spacing border-t border-borderColor">
+		<div class="mb-12 flex items-center justify-between">
+			<h2 class="text-2xl font-semibold">Recent writing</h2>
+			<a href="/posts/" class="text-sm text-textMuted transition-colors hover:text-accent">
+				View all
+			</a>
+		</div>
+		<div class="space-y-8">
 			{
-				cactusTech.map(({ href, title, desc }) => (
-					<li>
-						<a
-							href={href}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="cactus-link inline-block"
-						>
-							{title}
-						</a>:
-						<p class="inline-block sm:mt-2">{desc}</p>
-					</li>
+				allPostsByDate.map((post) => (
+					<article class="group">
+						<a href={`/posts/${post.id}/`} class="block">
+							<h3 class="mb-2 font-medium text-textColor transition-colors group-hover:text-accent">
+								{post.data.title}
+							</h3>
+							<p class="mb-2 text-sm text-textMuted line-clamp-2">
+								{post.data.description}
+							</p>
+							<time class="text-xs text-textMuted">
+								{new Date(post.data.publishDate).toLocaleDateString("en-GB", {
+									day: "numeric",
+									month: "short",
+									year: "numeric",
+								})}
+							</time>
+						</a>
+					</article>
 				))
 			}
-		</ul>
+		</div>
+	</section>
+
+	<!-- Final CTA -->
+	<section class="section-spacing border-t border-borderColor text-center">
+		<h2 class="mb-4 text-2xl font-semibold">Let's work together</h2>
+		<p class="mb-8 text-textMuted">
+			Have a project in mind? I'd love to hear about it.
+		</p>
+		<a href="mailto:contact@shkumbinhsn.com" class="btn-primary">
+			Get in touch
+		</a>
+		<p class="mt-4 text-xs text-textMuted">
+			Usually reply within 24 hours.
+		</p>
 	</section>
 </PageLayout>

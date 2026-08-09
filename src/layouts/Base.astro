@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 import type { SiteMeta } from "@/data/types";
 import BaseHead from "@/components/BaseHead";
@@ -21,13 +21,13 @@ const {
 <html lang={siteConfig.lang}>
 	<head>
 		<BaseHead title={title} description={description} ogImage={ogImage} articleDate={articleDate} />
-		<ViewTransitions />
+		<ClientRouter />
 	</head>
 	<body>
 		<ThemeProvider />
 		<SkipLink />
 		<Header />
-		<main id="main">
+		<main id="main" class="flex-1">
 			<slot />
 		</main>
 		<Footer />

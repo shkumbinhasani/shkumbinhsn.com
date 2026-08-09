@@ -29,7 +29,7 @@ const { page } = Astro.props;
 const { tag } = Astro.params;
 
 const meta = {
-	title: `Tag: ${tag}`,
+	title: `Posts tagged "${tag}"`,
 	description: `View all posts with the tag - ${tag}`,
 };
 
@@ -37,29 +37,32 @@ const paginationProps = {
 	...(page.url.prev && {
 		prevUrl: {
 			url: page.url.prev,
-			text: `← Previous Tags`,
+			text: `Previous`,
 		},
 	}),
 	...(page.url.next && {
 		nextUrl: {
 			url: page.url.next,
-			text: `Next Tags →`,
+			text: `Next`,
 		},
 	}),
 };
 ---
 
 <PageLayout meta={meta}>
-	<h1 class="title mb-6 flex items-center">
-		<a href="/tags/" class="text-accent sm:hover:underline">Tags</a>
-		<span class="me-3 ms-2">→</span>
-		<span class="text-xl">#{tag}</span>
-	</h1>
-	<section aria-label="Blog post list">
-		<ul class="space-y-8">
+	<section class="section-spacing">
+		<div class="mb-12">
+			<a href="/tags/" class="mb-2 inline-block text-sm text-textMuted transition-colors hover:text-accent">
+				All topics
+			</a>
+			<h1 class="text-3xl font-semibold md:text-4xl">{tag}</h1>
+			<p class="mt-2 text-textMuted">{page.total} post{page.total > 1 ? "s" : ""}</p>
+		</div>
+		
+		<ul class="space-y-10">
 			{
 				page.data.map((p) => (
-					<li class="flex flex-col flex-wrap gap-2 sm:flex-row [&_q]:basis-full">
+					<li>
 						<PostPreview post={p} as="h2" withDesc />
 					</li>
 				))

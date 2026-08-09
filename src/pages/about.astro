@@ -1,34 +1,51 @@
 ---
-import {Image} from "astro:assets";
-
 import PageLayout from "@/layouts/Base";
-import aboutImg from "@/assets/about-astro.png";
 
 const meta = {
-  title: "About",
-  description: "I'm a starter theme for Astro.build",
+	title: "About",
+	description: "About Shkumbin Hasani - Full Stack Software Engineer from Kosovo",
 };
 ---
 
 <PageLayout meta={meta}>
-  <div class="space-y-6">
-    <h1 class="title">About</h1>
-    <p>
-      Hi, I’m Shkumbin Hasani, a software engineer based in Podujeve, Kosovo.
-      I’m currently working at <a href="http://dua.com">Dua Ag</a> as a Full Stack Engineer.
-    </p>
-    <p>
-      I’m a mostly self-taught developer, and I’ve been working with Code and Technology for the past 9 years (Since 9th
-      grade).
-      I’ve worked with a variety of technologies, but I’m currently most passionate about TypeScript, Javascript, React,
-      Node.js.
-    </p>
-    <p>
-      I’m currently a big fan on TypeScript, and I’m trying to learn as much as I can about it.
-      I’m also trying to learn more about Design Patterns, and how to write better code.
-    </p>
-    <p>
-      I’m also a big fan of Entrepreneurship, and I’m trying to build my own products on the side.
-    </p>
-  </div>
+	<section class="section-spacing">
+		<h1 class="mb-8 text-3xl font-semibold md:text-4xl">About me</h1>
+		
+		<div class="max-w-2xl space-y-6 text-textMuted">
+			<p>
+				I'm a software engineer based in Podujeve, Kosovo. Currently Founder at{" "}
+				<a
+					href="https://plutolaboratories.com"
+					class="text-textColor hover:text-accent"
+					target="_blank"
+					rel="noopener noreferrer">Pluto Labs LLC</a
+				>.
+			</p>
+			
+			<p>
+				Self-taught developer with 9+ years of experience building with code. 
+				Started programming in 9th grade and haven't stopped since.
+			</p>
+			
+			<p>
+				My current stack centers around TypeScript, React, Node.js, and AWS. 
+				I care deeply about writing clean, maintainable code and building systems that scale.
+			</p>
+			
+			<p>
+				Beyond engineering, I'm interested in entrepreneurship and building products 
+				that solve real problems. Always working on something on the side.
+			</p>
+		</div>
+	</section>
+
+	<section class="section-spacing border-t border-borderColor">
+		<h2 class="mb-8 text-2xl font-semibold">Get in touch</h2>
+		<p class="mb-6 text-textMuted">
+			Interested in working together? Feel free to reach out.
+		</p>
+		<a href="mailto:contact@shkumbinhsn.com" class="btn-primary">
+			Send an email
+		</a>
+	</section>
 </PageLayout>

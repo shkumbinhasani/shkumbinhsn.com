@@ -12,10 +12,16 @@ const { post, as: Tag = "div", withDesc = false } = Astro.props;
 const postDate = post.data.updatedDate ?? post.data.publishDate;
 ---
 
-<FormattedDate date={postDate} class="min-w-[120px] text-gray-500" />
-<Tag>
-	<a href={`/posts/${post.slug}/`} class="cactus-link" rel="prefetch">
-		{post.data.title}
+<article class="group">
+	<a href={`/posts/${post.id}/`} class="block" data-astro-prefetch>
+		<Tag class="mb-2 font-medium text-textColor transition-colors group-hover:text-accent">
+			{post.data.title}
+		</Tag>
+		{withDesc && (
+			<p class="mb-2 text-sm text-textMuted line-clamp-2">
+				{post.data.description}
+			</p>
+		)}
+		<FormattedDate date={postDate} class="text-xs text-textMuted" />
 	</a>
-</Tag>
-{withDesc && <q class="line-clamp-3 block italic">{post.data.description}</q>}
+</article>
