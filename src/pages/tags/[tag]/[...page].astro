@@ -5,6 +5,7 @@ import { getCollection } from "astro:content";
 import PageLayout from "@/layouts/Base";
 import PostPreview from "@/components/blog/PostPreview";
 import Pagination from "@/components/Paginator";
+import XpIcon from "@/components/XpIcon";
 import { getUniqueTags, sortMDByDate } from "@/utils";
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
@@ -51,23 +52,29 @@ const paginationProps = {
 
 <PageLayout meta={meta}>
 	<section class="section-spacing">
-		<div class="mb-12">
-			<a href="/tags/" class="mb-2 inline-block text-sm text-textMuted transition-colors hover:text-accent">
-				All topics
-			</a>
-			<h1 class="text-3xl font-semibold md:text-4xl">{tag}</h1>
-			<p class="mt-2 text-textMuted">{page.total} post{page.total > 1 ? "s" : ""}</p>
+		<div class="mb-6 flex items-center gap-3">
+			<XpIcon name="folder" class="h-10 w-10" />
+			<div>
+				<h1 class="text-2xl leading-tight font-bold">{tag}</h1>
+				<p class="text-textMuted text-[11px]">
+					<a href="/tags/" class="xp-link">All topics</a>
+					&rsaquo; {tag} &middot; {page.total} post{page.total > 1 ? "s" : ""}
+				</p>
+			</div>
 		</div>
-		
-		<ul class="space-y-10">
-			{
-				page.data.map((p) => (
-					<li>
-						<PostPreview post={p} as="h2" withDesc />
-					</li>
-				))
-			}
-		</ul>
+
+		<div class="xp-group">
+			<h2 class="xp-group-title">Files in this folder</h2>
+			<ul class="-mx-2 space-y-1">
+				{
+					page.data.map((p) => (
+						<li>
+							<PostPreview post={p} as="h3" withDesc />
+						</li>
+					))
+				}
+			</ul>
+		</div>
 		<Pagination {...paginationProps} />
 	</section>
 </PageLayout>

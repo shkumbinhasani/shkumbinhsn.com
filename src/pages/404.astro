@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/Base";
+import XpIcon from "@/components/XpIcon";
 
 const meta = {
 	title: "Page not found",
@@ -8,14 +9,35 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-	<section class="section-spacing flex flex-col items-center justify-center text-center">
-		<p class="mb-2 text-6xl font-semibold text-accent">404</p>
-		<h1 class="mb-4 text-2xl font-semibold">Page not found</h1>
-		<p class="mb-8 text-textMuted">
-			The page you're looking for doesn't exist or has been moved.
-		</p>
-		<a href="/" class="btn-primary">
-			Back to home
-		</a>
+	<section class="flex min-h-[50vh] items-center justify-center py-12">
+		<div
+			class="xp-dialog"
+			role="alertdialog"
+			aria-labelledby="err-title"
+			aria-describedby="err-desc"
+		>
+			<div class="xp-titlebar">
+				<span id="err-title" class="xp-titlebar-title">Internet Explorer</span>
+				<a href="/" class="xp-titlebar-btn is-close" aria-label="Close and go home">
+					<XpIcon name="close" class="h-3 w-3" />
+				</a>
+			</div>
+			<div class="xp-dialog-body">
+				<div class="flex items-start gap-4">
+					<XpIcon name="error" class="h-8 w-8 shrink-0" />
+					<div id="err-desc" class="space-y-1 text-[12px]">
+						<h1 class="text-[12px] font-bold">The page cannot be found</h1>
+						<p>
+							Error 404. The page you are looking for might have been removed, had its name changed,
+							or is temporarily unavailable.
+						</p>
+					</div>
+				</div>
+				<div class="flex justify-center gap-2">
+					<a href="/" class="btn-primary">OK</a>
+					<a href="/posts/" class="btn-secondary">Browse posts</a>
+				</div>
+			</div>
+		</div>
 	</section>
 </PageLayout>

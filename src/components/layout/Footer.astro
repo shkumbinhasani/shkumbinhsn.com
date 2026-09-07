@@ -1,33 +1,18 @@
 ---
+import XpIcon from "../XpIcon.astro";
 import { siteConfig } from "@/site-config";
 
 const year = new Date().getFullYear();
-
-const socialLinks = [
-	{ name: "GitHub", href: "https://github.com/shkumbinhasani" },
-	{ name: "LinkedIn", href: "https://www.linkedin.com/in/shkumbin-hasani-a2a812198/" },
-	{ name: "Email", href: "mailto:contact@shkumbinhsn.com" },
-];
 ---
 
-<footer class="mt-auto border-t border-borderColor py-8">
-	<div class="flex flex-col items-center justify-between gap-6 md:flex-row">
-		<p class="text-sm text-textMuted">
-			&copy; {year} {siteConfig.author}
-		</p>
-		<nav aria-label="Social links" class="flex gap-6">
-			{
-				socialLinks.map((link) => (
-					<a
-						href={link.href}
-						target={link.href.startsWith("mailto") ? undefined : "_blank"}
-						rel={link.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
-						class="text-sm text-textMuted transition-colors hover:text-textColor"
-					>
-						{link.name}
-					</a>
-				))
-			}
-		</nav>
-	</div>
+<footer class="xp-statusbar">
+	<span class="flex min-w-0 flex-1 items-center gap-1.5 truncate">
+		<XpIcon name="page" class="h-4 w-4 shrink-0" />
+		<span class="truncate">Done</span>
+	</span>
+	<span class="xp-statusbar-cell hidden sm:flex">&copy; {year} {siteConfig.author}</span>
+	<span class="xp-statusbar-cell">
+		<XpIcon name="globe" class="h-4 w-4 shrink-0" />
+		<span>Internet</span>
+	</span>
 </footer>

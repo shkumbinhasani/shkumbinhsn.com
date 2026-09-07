@@ -1,5 +1,6 @@
 ---
 import PageLayout from "@/layouts/Base";
+import XpIcon from "@/components/XpIcon";
 
 const meta = {
 	title: "About",
@@ -9,43 +10,69 @@ const meta = {
 
 <PageLayout meta={meta}>
 	<section class="section-spacing">
-		<h1 class="mb-8 text-3xl font-semibold md:text-4xl">About me</h1>
-		
-		<div class="max-w-2xl space-y-6 text-textMuted">
-			<p>
-				I'm a software engineer based in Podujeve, Kosovo. Currently Founder at{" "}
-				<a
-					href="https://plutolaboratories.com"
-					class="text-textColor hover:text-accent"
-					target="_blank"
-					rel="noopener noreferrer">Pluto Labs LLC</a
-				>.
-			</p>
-			
-			<p>
-				Self-taught developer with 9+ years of experience building with code. 
-				Started programming in 9th grade and haven't stopped since.
-			</p>
-			
-			<p>
-				My current stack centers around TypeScript, React, Node.js, and AWS. 
-				I care deeply about writing clean, maintainable code and building systems that scale.
-			</p>
-			
-			<p>
-				Beyond engineering, I'm interested in entrepreneurship and building products 
-				that solve real problems. Always working on something on the side.
-			</p>
+		<div class="mb-6 flex items-center gap-3">
+			<XpIcon name="user" class="h-10 w-10" />
+			<div>
+				<h1 class="text-2xl leading-tight font-bold">About me</h1>
+				<p class="text-textMuted text-[11px]">User Accounts &rsaquo; Shkumbin Hasani</p>
+			</div>
 		</div>
-	</section>
 
-	<section class="section-spacing border-t border-borderColor">
-		<h2 class="mb-8 text-2xl font-semibold">Get in touch</h2>
-		<p class="mb-6 text-textMuted">
-			Interested in working together? Feel free to reach out.
-		</p>
-		<a href="mailto:contact@shkumbinhsn.com" class="btn-primary">
-			Send an email
-		</a>
+		<div class="grid gap-6 lg:grid-cols-[1fr_240px]">
+			<div class="xp-group">
+				<h2 class="xp-group-title">General</h2>
+				<div class="max-w-2xl space-y-4 leading-relaxed">
+					<p>
+						I'm a Principal Engineer at ANON Labs AI, where I build{" "}
+						<a href="https://serus.ai" class="xp-link" target="_blank" rel="noopener noreferrer"
+							>Serus.ai</a
+						>. Outside of that I run{" "}
+						<a
+							href="https://plutolaboratories.com"
+							class="xp-link"
+							target="_blank"
+							rel="noopener noreferrer">Pluto Labs LLC</a
+						>, a small studio where I build my own ideas and help other founders get products out
+						the door.
+					</p>
+
+					<p>I'm based in Podujeve, Kosovo.</p>
+
+					<p>
+						Self-taught developer with 9+ years of experience building with code. Started
+						programming in 9th grade and haven't stopped since.
+					</p>
+
+					<p>
+						My current stack centers around TypeScript, React, Node.js, and AWS. I care deeply about
+						writing clean, maintainable code and building systems that scale.
+					</p>
+
+					<p>
+						Beyond engineering, I'm interested in entrepreneurship and building products that solve
+						real problems. Always working on something on the side.
+					</p>
+				</div>
+			</div>
+
+			<aside class="xp-pane-strip self-start">
+				<section class="xp-pane">
+					<h2 class="xp-pane-head">Get in touch</h2>
+					<div class="xp-pane-body space-y-3">
+						<p>Interested in working together? Feel free to reach out.</p>
+						<a href="mailto:contact@shkumbinhsn.com" class="btn-primary w-full">Send an email</a>
+					</div>
+				</section>
+				<section class="xp-pane">
+					<h2 class="xp-pane-head">Stack</h2>
+					<ul class="xp-pane-body text-textColor space-y-1">
+						<li>TypeScript</li>
+						<li>React &amp; React Native</li>
+						<li>Node.js</li>
+						<li>AWS</li>
+					</ul>
+				</section>
+			</aside>
+		</div>
 	</section>
 </PageLayout>

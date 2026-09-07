@@ -1,10 +1,12 @@
 {/* Inlined to avoid FOUC. */}
 <script is:inline>
+	/*
+	 * Luna Blue is the whole point of the look, so it is the default regardless of
+	 * the OS colour scheme. Royale Noir (dark) is opt-in via the toggle and sticks.
+	 */
 	function getUserPref() {
 		const storedTheme = typeof localStorage !== "undefined" && localStorage.getItem("theme");
-		return (
-			storedTheme || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
-		);
+		return storedTheme || "light";
 	}
 
 	function setTheme(theme) {
@@ -20,9 +22,6 @@
 
 	// initial setup
 	setTheme(getUserPref());
-
-	// View Transitions hook to restore theme mode
-	document.addEventListener("astro:after-swap", () => setTheme(getUserPref()));
 
 	// listen for theme-change custom event, fired in src/components/ThemeToggle.astro
 	document.addEventListener("theme-change", (e) => {

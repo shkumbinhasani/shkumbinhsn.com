@@ -7,6 +7,32 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
+ * Tailwind's `hover:` is already wrapped in `@media (hover: hover)`, which is
+ * enough for colour changes. Motion needs the stricter gate as well — a hybrid
+ * device reporting hover support but driven by a finger leaves an element stuck
+ * in its lifted state after a tap.
+ */
+@custom-variant hover-fine {
+	@media (hover: hover) and (pointer: fine) {
+		&:hover {
+			@slot;
+		}
+	}
+}
+
+@theme {
+	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+	--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+	--default-transition-timing-function: ease;
+}
+
+@utility transition-motion {
+	transition-property: opacity, transform, translate, scale, rotate;
+	transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+	transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+
+/*
  * `inline` so utilities emit `hsl(var(--theme-*))` directly rather than going
  * through an intermediate variable. This keeps the light/dark swap working when
  * `.dark` redefines the `--theme-*` values below.
@@ -17,69 +43,668 @@
 	--color-textMuted: hsl(var(--theme-text-muted));
 	--color-accent: hsl(var(--theme-accent));
 	--color-borderColor: hsl(var(--theme-border));
+	--color-face: var(--xp-face);
 
-	--font-sans:
-		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, ui-sans-serif, sans-serif,
-		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--font-sans: Tahoma, Verdana, "DejaVu Sans", Geneva, sans-serif;
+	--font-title: "Trebuchet MS", Tahoma, Verdana, sans-serif;
 }
 
 @layer base {
+	/*
+	 * Luna Blue — the default Windows XP look. `--theme-*` are the tokens the
+	 * Tailwind utilities read; `--xp-*` are the window chrome colours that only
+	 * the hand-written XP classes below need.
+	 */
 	:root {
 		color-scheme: light;
-		--theme-bg: 0deg 0% 99%;
-		--theme-text: 0deg 0% 12%;
-		--theme-text-muted: 0deg 0% 45%;
-		--theme-accent: 142deg 71% 45%;
-		--theme-border: 0deg 0% 90%;
+		--theme-bg: 0deg 0% 100%;
+		--theme-text: 0deg 0% 0%;
+		--theme-text-muted: 0deg 0% 35%;
+		--theme-accent: 218deg 71% 45%; /* #215dc6, the task-pane link blue */
+		--theme-border: 210deg 27% 61%; /* #7f9db9, the XP text-box border */
+
+		--xp-face: #ece9d8;
+		--xp-face-dark: #d4d0c8;
+		--xp-frame: #0831d9;
+		--xp-frame-light: #3d95ff;
+		--xp-title-text: #fff;
+		--xp-title: linear-gradient(
+			180deg,
+			#0997ff 0%,
+			#0053ee 8%,
+			#0050ee 40%,
+			#0066ee 88%,
+			#005bee 95%,
+			#003dd7 100%
+		);
+		--xp-menu-hover: #316ac5;
+		--xp-pane: linear-gradient(180deg, #7ba2e7, #6375d6);
+		--xp-pane-body: #d6dff7;
+		--xp-pane-head: linear-gradient(90deg, #fff, #c6d3f7);
+		--xp-pane-title: #215dc6;
+		--xp-pane-border: #fff;
+		--xp-btn: linear-gradient(180deg, #fff 0%, #f4f3ee 45%, #ecebe5 86%, #d8d0c4 100%);
+		--xp-btn-border: #003c74;
+		--xp-btn-hover: #f8d488;
+		--xp-btn-hover-dark: #e5a01a;
+		--xp-btn-default: #7ab5ff;
+		--xp-taskbar: linear-gradient(
+			180deg,
+			#1f2f86 0%,
+			#3165c4 3%,
+			#3682e5 6%,
+			#4490e6 10%,
+			#3883e5 12%,
+			#2b71e0 15%,
+			#2663da 18%,
+			#215cd9 23%,
+			#2158d8 38%,
+			#1f51d1 54%,
+			#1d4bc9 86%,
+			#1c44c1 92%,
+			#1c42be 100%
+		);
+		--xp-tray: linear-gradient(
+			180deg,
+			#0c59b9 1%,
+			#139ee9 6%,
+			#18b5f2 10%,
+			#139beb 14%,
+			#1290e8 19%,
+			#0d8dea 63%,
+			#0d8de9 88%,
+			#0c86e2 91%,
+			#0e7ddb 94%,
+			#0e75d1 97%,
+			#0f70c8 100%
+		);
+		--xp-tray-border: #092e51;
+		--xp-task-active: linear-gradient(180deg, #1e4fbd, #1a48ae 50%, #1c4ec0);
+		/* Bliss sits on top; the gradients underneath stand in until the image loads. */
+		--xp-desktop:
+			url("/bliss.jpg") center / cover no-repeat,
+			radial-gradient(130% 70% at 50% 118%, #6cb83a 0%, #4a9a26 38%, #2f7519 56%, transparent 57%),
+			linear-gradient(180deg, #1a55c9 0%, #3d86e0 38%, #8fc6f2 62%, #dbeefb 72%, #c9e6f7 100%);
+		--xp-shadow: 0 8px 24px rgba(0, 20, 80, 0.45);
 	}
 
+	/*
+	 * Royale Noir — the dark Luna variant. Same geometry, darker paint.
+	 */
 	:root.dark {
 		color-scheme: dark;
-		--theme-bg: 0deg 0% 7%;
-		--theme-text: 0deg 0% 95%;
-		--theme-text-muted: 0deg 0% 55%;
-		--theme-accent: 142deg 71% 45%;
-		--theme-border: 0deg 0% 20%;
+		--theme-bg: 220deg 8% 12%;
+		--theme-text: 0deg 0% 92%;
+		--theme-text-muted: 220deg 6% 65%;
+		--theme-accent: 205deg 90% 65%;
+		--theme-border: 220deg 8% 32%;
+
+		--xp-face: #2b2f37;
+		--xp-face-dark: #22262d;
+		--xp-frame: #14171d;
+		--xp-frame-light: #4a5568;
+		--xp-title-text: #f4f4f4;
+		--xp-title: linear-gradient(180deg, #5b6577 0%, #38404f 10%, #2c333f 55%, #1f242d 100%);
+		--xp-menu-hover: #3b6fc9;
+		--xp-pane: linear-gradient(180deg, #3c4556, #2b323f);
+		--xp-pane-body: #343a46;
+		--xp-pane-head: linear-gradient(90deg, #4a5364, #3a4251);
+		--xp-pane-title: #9ecbff;
+		--xp-pane-border: #4b5566;
+		--xp-btn: linear-gradient(180deg, #4d5563 0%, #3f4652 55%, #333944 100%);
+		--xp-btn-border: #1a1e26;
+		--xp-btn-hover: #c98a1f;
+		--xp-btn-hover-dark: #8a5a0e;
+		--xp-btn-default: #4f8fe0;
+		--xp-taskbar: linear-gradient(180deg, #3a414d 0%, #262b34 8%, #1e222a 60%, #171a20 100%);
+		--xp-tray: linear-gradient(180deg, #2f4e78 0%, #24507e 10%, #1d4670 60%, #183a5f 100%);
+		--xp-tray-border: #0c1a2a;
+		--xp-task-active: linear-gradient(180deg, #14171d, #1a1e26 50%, #14171d);
+		--xp-desktop:
+			linear-gradient(rgba(5, 8, 16, 0.65), rgba(5, 8, 16, 0.65)),
+			url("/bliss.jpg") center / cover no-repeat;
+		--xp-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
 	}
 
 	html {
 		@apply scroll-smooth;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+	}
+
 	html body {
-		@apply mx-auto flex min-h-screen max-w-5xl flex-col bg-bgColor px-6 py-8 text-base font-normal text-textColor antialiased;
-		font-family:
-			system-ui,
-			-apple-system,
-			BlinkMacSystemFont,
-			"Segoe UI",
-			Roboto,
-			sans-serif;
-		line-height: 1.6;
+		@apply text-textColor flex min-h-screen flex-col;
+		font-family: Tahoma, Verdana, "DejaVu Sans", Geneva, sans-serif;
+		font-size: 13px;
+		line-height: 1.55;
+		padding: 1.25rem 0.75rem calc(30px + 1.5rem);
+		background: var(--xp-desktop);
+		background-attachment: fixed;
+		background-color: #3a6ea5;
+		-webkit-font-smoothing: auto;
+	}
+
+	@media (width >= 48rem) {
+		html body {
+			padding: 2rem 1.5rem calc(30px + 2.5rem);
+		}
+	}
+
+	::selection {
+		background: #316ac5;
+		color: #fff;
+	}
+
+	/* XP-style scrollbars. WebKit/Blink only; Firefox gets its own `scrollbar-color`. */
+	* {
+		scrollbar-color: #c1d2ee var(--xp-face);
+	}
+
+	::-webkit-scrollbar {
+		width: 17px;
+		height: 17px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: repeating-conic-gradient(#f0f0f0 0% 25%, #fff 0% 50%) 0 0 / 2px 2px;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: linear-gradient(90deg, #c1d2ee, #d3dff7 45%, #b9caea);
+		border: 1px solid #7f9db9;
+		border-radius: 3px;
+		box-shadow: inset 1px 1px #fff;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: linear-gradient(90deg, #d0dfff, #e2ebff 45%, #c8d8fb);
+	}
+
+	::-webkit-scrollbar-button {
+		display: none;
+	}
+
+	:root.dark ::-webkit-scrollbar-track {
+		background: #22262d;
+	}
+
+	:root.dark ::-webkit-scrollbar-thumb {
+		background: linear-gradient(90deg, #4a5363, #5a6475 45%, #46505f);
+		border-color: #14171d;
+		box-shadow: none;
 	}
 }
 
 @layer components {
 	.section-spacing {
-		@apply py-16 md:py-24;
+		@apply py-8 md:py-10;
+	}
+
+	/* ---------- the window ---------- */
+	.xp-window {
+		@apply mx-auto flex w-full max-w-5xl flex-1 flex-col;
+		background: var(--xp-frame);
+		border-radius: 8px 8px 0 0;
+		padding: 0 3px 3px;
+		box-shadow: var(--xp-shadow);
+	}
+
+	.xp-titlebar {
+		@apply sticky top-0 z-50 flex items-center gap-2 px-1.5;
+		height: 30px;
+		background: var(--xp-title);
+		border-radius: 8px 8px 0 0;
+		margin: 0 -3px;
+		color: var(--xp-title-text);
+		font-family: var(--font-title);
+		font-weight: 700;
+		font-size: 13px;
+		text-shadow: 1px 1px 0 #0a1883;
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+	}
+
+	:root.dark .xp-titlebar {
+		text-shadow: 1px 1px 0 #000;
+	}
+
+	.xp-titlebar-title {
+		@apply min-w-0 flex-1 truncate;
+	}
+
+	.xp-titlebar-btn {
+		@apply flex h-[21px] w-[21px] shrink-0 items-center justify-center rounded-[3px] text-white;
+		background: linear-gradient(180deg, #3d9bff 0%, #2775e8 40%, #1c5fd6 60%, #1550c7 100%);
+		border: 1px solid rgba(255, 255, 255, 0.7);
+		box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.35);
+	}
+
+	.xp-titlebar-btn:hover {
+		background: linear-gradient(180deg, #5eb0ff 0%, #4590f7 40%, #2f74e6 60%, #2565d8 100%);
+	}
+
+	.xp-titlebar-btn.is-close {
+		background: linear-gradient(180deg, #e9a28f 0%, #d9573f 35%, #d0482f 60%, #c8341b 100%);
+	}
+
+	.xp-titlebar-btn.is-close:hover {
+		background: linear-gradient(180deg, #f3b8a8 0%, #e96f57 35%, #e05e45 60%, #d64a32 100%);
+	}
+
+	:root.dark .xp-titlebar-btn {
+		background: linear-gradient(180deg, #5d6878 0%, #454d5b 45%, #333a46 100%);
+		border-color: rgba(255, 255, 255, 0.35);
+	}
+
+	.xp-menubar {
+		@apply flex flex-wrap items-center gap-x-1 px-1;
+		min-height: 24px;
+		background: var(--xp-face);
+		border-bottom: 1px solid #fff;
+		box-shadow: 0 1px 0 var(--xp-face-dark);
+		font-size: 11px;
+	}
+
+	:root.dark .xp-menubar {
+		border-bottom-color: var(--xp-frame-light);
+	}
+
+	.xp-menu-item {
+		@apply inline-flex items-center px-2 py-0.5;
+		color: hsl(var(--theme-text));
+		text-decoration: none;
+	}
+
+	.xp-menu-item:hover,
+	.xp-menu-item[aria-current="page"] {
+		background: var(--xp-menu-hover);
+		color: #fff;
+	}
+
+	.xp-menu-item:focus-visible {
+		outline: 1px dotted currentColor;
+		outline-offset: -2px;
+	}
+
+	.xp-toolbar {
+		@apply flex items-center gap-2 px-2 py-1;
+		background: var(--xp-face);
+		border-bottom: 1px solid var(--xp-face-dark);
+		font-size: 11px;
+	}
+
+	.xp-toolbar-grip {
+		width: 3px;
+		height: 20px;
+		border-left: 1px solid #fff;
+		border-right: 1px solid #a09e94;
+		flex-shrink: 0;
+	}
+
+	:root.dark .xp-toolbar-grip {
+		border-left-color: var(--xp-frame-light);
+		border-right-color: var(--xp-frame);
+	}
+
+	.xp-textbox {
+		@apply flex min-w-0 flex-1 items-center gap-1.5 truncate px-1;
+		height: 22px;
+		background: hsl(var(--theme-bg));
+		border: 1px solid #7f9db9;
+		color: hsl(var(--theme-text));
+	}
+
+	:root.dark .xp-textbox {
+		border-color: var(--xp-frame-light);
+	}
+
+	.xp-content {
+		@apply flex-1 px-4 py-2 sm:px-6;
+		background: hsl(var(--theme-bg));
+	}
+
+	.xp-statusbar {
+		@apply flex items-center gap-2 px-2;
+		height: 23px;
+		background: var(--xp-face);
+		border-top: 1px solid var(--xp-face-dark);
+		font-size: 11px;
+		color: hsl(var(--theme-text));
+	}
+
+	.xp-statusbar-cell {
+		@apply flex min-w-0 items-center gap-1 truncate px-1;
+		border-left: 1px solid #a09e94;
+		box-shadow: -1px 0 0 #fff;
+		height: 17px;
+	}
+
+	:root.dark .xp-statusbar-cell {
+		border-left-color: var(--xp-frame);
+		box-shadow: -1px 0 0 var(--xp-frame-light);
+	}
+
+	/* ---------- taskbar ---------- */
+	.xp-taskbar {
+		@apply fixed inset-x-0 bottom-0 z-[60] flex items-stretch;
+		height: 30px;
+		background: var(--xp-taskbar);
+		font-size: 11px;
+		color: #fff;
+	}
+
+	.xp-start {
+		@apply flex items-center gap-1.5 pr-5 pl-2;
+		height: 30px;
+		background: linear-gradient(
+			180deg,
+			#4ea84e 0%,
+			#3c9a3c 8%,
+			#2f8c2f 40%,
+			#2d842d 60%,
+			#2f8f2f 92%,
+			#1f6e1f 100%
+		);
+		border-radius: 0 12px 12px 0;
+		box-shadow:
+			inset 1px 1px 0 rgba(255, 255, 255, 0.35),
+			2px 0 3px rgba(0, 0, 0, 0.35);
+		font-family: var(--font-title);
+		font-size: 17px;
+		font-style: italic;
+		font-weight: 700;
+		text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+		color: #fff;
+		text-decoration: none;
+	}
+
+	.xp-start:hover {
+		background: linear-gradient(
+			180deg,
+			#5fbf5f 0%,
+			#4aae4a 8%,
+			#3a9e3a 40%,
+			#38963a 60%,
+			#3aa13a 92%,
+			#287f28 100%
+		);
+	}
+
+	.xp-task {
+		@apply my-[3px] ml-1 flex items-center gap-1.5 truncate rounded-[3px] px-2;
+		max-width: 12rem;
+		background: var(--xp-task-active);
+		box-shadow:
+			inset 1px 1px 2px rgba(0, 0, 0, 0.45),
+			inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+		font-weight: 700;
+		color: #fff;
+		text-decoration: none;
+	}
+
+	.xp-tray {
+		@apply ml-auto flex items-center gap-1.5 pr-3 pl-2;
+		background: var(--xp-tray);
+		border-left: 1px solid var(--xp-tray-border);
+		box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.25);
+	}
+
+	.xp-tray a {
+		@apply flex h-[18px] w-[18px] items-center justify-center rounded-[2px] text-white;
+	}
+
+	.xp-tray a:hover {
+		background: rgba(255, 255, 255, 0.25);
+	}
+
+	.xp-clock {
+		@apply pl-2 tabular-nums;
+		color: #fff;
+		text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+	}
+
+	/* ---------- controls ---------- */
+	.xp-btn,
+	.btn-primary,
+	.btn-secondary {
+		@apply inline-flex min-w-[75px] items-center justify-center rounded-[3px] px-3;
+		height: 23px;
+		background: var(--xp-btn);
+		border: 1px solid var(--xp-btn-border);
+		color: hsl(var(--theme-text));
+		font-size: 11px;
+		text-decoration: none;
+		box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.08);
+	}
+
+	.xp-btn:hover,
+	.btn-primary:hover,
+	.btn-secondary:hover {
+		box-shadow:
+			inset -1px 1px 0 #fff0cf,
+			inset 1px 2px 0 var(--xp-btn-hover),
+			inset -2px 2px 0 #fbc761,
+			inset 2px -2px 0 var(--xp-btn-hover-dark);
+	}
+
+	.xp-btn:active,
+	.btn-primary:active,
+	.btn-secondary:active {
+		background: linear-gradient(180deg, #cdcac3, #e3e1da 60%, #eae8e0);
+		box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+	}
+
+	.xp-btn:focus-visible,
+	.btn-primary:focus-visible,
+	.btn-secondary:focus-visible {
+		outline: 1px dotted #000;
+		outline-offset: -4px;
 	}
 
 	.btn-primary {
-		@apply inline-flex items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-medium text-white transition-all hover:opacity-90;
+		box-shadow:
+			inset -1px 1px 0 #cee7ff,
+			inset 1px 2px 0 var(--xp-btn-default),
+			inset -2px 2px 0 #5fa3f0,
+			inset 2px -2px 0 #4b8ee6;
 	}
 
-	.btn-secondary {
-		@apply inline-flex items-center justify-center rounded-lg border border-borderColor px-6 py-3 text-sm font-medium text-textColor transition-all hover:border-textMuted;
+	.xp-btn-sm {
+		min-width: 0;
+		height: 20px;
+		padding-inline: 8px;
 	}
 
-	.card {
-		@apply rounded-xl border border-borderColor p-6 transition-all hover:border-textMuted;
+	.xp-icon-btn {
+		@apply inline-flex h-[22px] w-[22px] items-center justify-center rounded-[3px];
+		color: hsl(var(--theme-text));
+		border: 1px solid transparent;
+	}
+
+	.xp-icon-btn:hover {
+		background: #fff;
+		border-color: #316ac5;
+		box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15);
+	}
+
+	:root.dark .xp-icon-btn:hover {
+		background: var(--xp-face-dark);
+	}
+
+	/* ---------- task pane (the Explorer sidebar panels) ---------- */
+	.xp-pane {
+		@apply overflow-hidden rounded-t-[4px];
+		border: 1px solid var(--xp-pane-border);
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+	}
+
+	.xp-pane-head {
+		@apply flex items-center justify-between px-3;
+		height: 25px;
+		background: var(--xp-pane-head);
+		color: var(--xp-pane-title);
+		font-weight: 700;
+		font-size: 11px;
+	}
+
+	.xp-pane-body {
+		@apply px-3 py-2.5;
+		background: var(--xp-pane-body);
+		font-size: 11px;
+	}
+
+	.xp-pane-body a {
+		color: var(--xp-pane-title);
+		text-decoration: none;
+	}
+
+	.xp-pane-body a:hover {
+		text-decoration: underline;
+	}
+
+	.xp-pane-strip {
+		@apply space-y-3 rounded-[4px] p-3;
+		background: var(--xp-pane);
+	}
+
+	/* ---------- group box (fieldset look) ---------- */
+	.xp-group {
+		@apply relative rounded-[4px] p-4 pt-5;
+		border: 1px solid #d0d0bf;
+	}
+
+	:root.dark .xp-group {
+		border-color: var(--xp-frame-light);
+	}
+
+	.xp-group-title {
+		@apply absolute -top-2 left-3 px-1 font-normal;
+		background: hsl(var(--theme-bg));
+		color: #0046d5;
+		font-size: 11px;
+	}
+
+	:root.dark .xp-group-title {
+		color: hsl(var(--theme-accent));
+	}
+
+	/* ---------- file list row ---------- */
+	.xp-file {
+		@apply flex items-start gap-3 rounded-[3px] p-2;
+		border: 1px solid transparent;
+	}
+
+	.xp-file:hover {
+		border-color: #99bbe8;
+		background: #e6effc;
+	}
+
+	.xp-file[aria-current="page"] {
+		border-color: #316ac5;
+		background: #316ac5;
+		color: #fff;
+	}
+
+	:root.dark .xp-file:hover {
+		border-color: #4a6fa8;
+		background: #263346;
+	}
+
+	.xp-file-icon {
+		@apply mt-0.5 h-8 w-8 shrink-0;
+	}
+
+	/* ---------- link default ---------- */
+	.xp-link {
+		color: hsl(var(--theme-accent));
+		text-decoration: none;
+	}
+
+	.xp-link:hover {
+		text-decoration: underline;
+	}
+
+	/* ---------- tag "button" ---------- */
+	.xp-tag {
+		@apply inline-flex h-[20px] items-center rounded-[3px] px-2;
+		background: var(--xp-btn);
+		border: 1px solid #aca899;
+		color: hsl(var(--theme-text));
+		font-size: 11px;
+		text-decoration: none;
+	}
+
+	.xp-tag:hover {
+		border-color: var(--xp-btn-border);
+		box-shadow:
+			inset 1px 1px 0 var(--xp-btn-hover),
+			inset -1px -1px 0 var(--xp-btn-hover-dark);
+	}
+
+	:root.dark .xp-tag {
+		border-color: var(--xp-btn-border);
+	}
+
+	/* ---------- balloon tip ---------- */
+	.xp-balloon {
+		@apply relative inline-block rounded-[6px] px-3 py-2;
+		background: #ffffe1;
+		border: 1px solid #000;
+		color: #000;
+		font-size: 11px;
+		box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+	}
+
+	.xp-balloon::before {
+		content: "";
+		position: absolute;
+		left: 18px;
+		top: -11px;
+		border: 6px solid transparent;
+		border-bottom-color: #000;
+		border-top: 0;
+	}
+
+	.xp-balloon::after {
+		content: "";
+		position: absolute;
+		left: 19px;
+		top: -9px;
+		border: 5px solid transparent;
+		border-bottom-color: #ffffe1;
+		border-top: 0;
+	}
+
+	/* ---------- dialog (404) ---------- */
+	.xp-dialog {
+		@apply mx-auto w-full max-w-md rounded-[8px_8px_0_0];
+		background: var(--xp-frame);
+		padding: 0 3px 3px;
+		box-shadow: var(--xp-shadow);
+	}
+
+	.xp-dialog .xp-titlebar {
+		position: static;
+	}
+
+	.xp-dialog-body {
+		@apply flex flex-col gap-4 px-4 py-4;
+		background: var(--xp-face);
 	}
 }
 
+/* Headings site-wide in the Trebuchet MS that titles XP windows. */
+h1,
+h2,
+h3 {
+	font-family: var(--font-title);
+}
+
 /*
- * Typography overrides, previously the `typography` key of the v3 JS config.
- * Deliberately unlayered so they win over the plugin's layered defaults.
+ * Typography overrides. Unlayered so they win over the plugin's layered defaults.
  */
 .prose {
 	--tw-prose-body: hsl(var(--theme-text));
@@ -91,32 +716,59 @@
 	--tw-prose-code: hsl(var(--theme-text));
 	--tw-prose-hr: hsl(var(--theme-border));
 	--tw-prose-th-borders: hsl(var(--theme-border));
+	--tw-prose-td-borders: hsl(var(--theme-border));
+	font-family: Verdana, Tahoma, "DejaVu Sans", sans-serif;
+	font-size: 14px;
+	line-height: 1.7;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+	font-family: var(--font-title);
+}
+
+.prose h2 {
+	padding-bottom: 0.25em;
+	border-bottom: 1px solid hsl(var(--theme-border));
 }
 
 .prose a {
 	color: hsl(var(--theme-accent));
-	text-decoration: none;
-	font-weight: 500;
+	text-decoration: underline;
+	font-weight: 400;
 }
 
 .prose a:hover {
-	text-decoration: underline;
+	color: #ff6600;
 }
 
 .prose strong {
-	font-weight: 600;
+	font-weight: 700;
 }
 
-/*
- * Inline code only. `:not(pre) >` is required because these rules are unlayered
- * and would otherwise override the typography plugin's `pre code` reset,
- * putting a light background behind the Shiki-highlighted code blocks.
- */
+.prose img {
+	border: 1px solid hsl(var(--theme-border));
+	padding: 3px;
+	background: hsl(var(--theme-bg));
+}
+
+/* Inline code only — `:not(pre) >` keeps the Shiki blocks untouched. */
 .prose :not(pre) > code {
-	background-color: hsl(var(--theme-border));
-	border-radius: 4px;
-	padding: 2px 6px;
+	background-color: var(--xp-face);
+	border: 1px solid hsl(var(--theme-border) / 0.6);
+	border-radius: 0;
+	padding: 1px 4px;
 	font-weight: 400;
+	font-family: "Lucida Console", Consolas, Monaco, monospace;
+	font-size: 0.9em;
+}
+
+.prose pre {
+	border: 1px solid #7f9db9;
+	border-radius: 0;
+	font-family: "Lucida Console", Consolas, Monaco, monospace;
 }
 
 .prose code::before,
@@ -125,17 +777,26 @@
 }
 
 .prose blockquote {
-	border-left-color: hsl(var(--theme-accent));
+	border-left: 3px solid hsl(var(--theme-accent));
+	background: var(--xp-pane-body);
+	padding: 0.5em 1em;
 	font-style: normal;
 }
 
+:root.dark .prose blockquote {
+	background: var(--xp-face);
+}
+
 .prose hr {
-	border-color: hsl(var(--theme-border));
+	border-top: 1px solid #a09e94;
+	border-bottom: 1px solid #fff;
+	border-color: #a09e94 transparent #fff;
 }
 
 .prose thead th {
-	font-weight: 600;
-	border-bottom-color: hsl(var(--theme-border));
+	font-weight: 700;
+	background: var(--xp-face);
+	border-bottom: 1px solid hsl(var(--theme-border));
 }
 
 .prose tbody tr {

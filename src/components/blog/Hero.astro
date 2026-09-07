@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import FormattedDate from "../FormattedDate.astro";
+import XpIcon from "../XpIcon.astro";
 
 interface Props {
 	content: CollectionEntry<"post">;
@@ -22,11 +23,11 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 
 {
 	data.coverImage && (
-		<div class="mb-8 aspect-video overflow-hidden rounded-lg">
+		<div class="border-borderColor bg-bgColor mb-6 overflow-hidden border p-[3px]">
 			<Image
 				src={data.coverImage.src}
 				alt={data.coverImage.alt}
-				class="object-cover"
+				class="aspect-video w-full object-cover"
 				loading="eager"
 				fetchpriority="high"
 				quality={92}
@@ -35,30 +36,37 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 	)
 }
 
-<h1 class="mb-4 text-3xl font-semibold md:text-4xl">{data.title}</h1>
+<div class="flex items-start gap-3">
+	<XpIcon name="page" class="mt-1 h-8 w-8 shrink-0" />
+	<div class="min-w-0">
+		<h1 class="mb-2 text-2xl leading-tight font-bold md:text-3xl">{data.title}</h1>
 
-<div class="flex flex-wrap items-center gap-3 text-sm text-textMuted">
-	<FormattedDate date={data.publishDate} dateTimeOptions={dateTimeOptions} />
-	<span class="text-borderColor">·</span>
-	<span>{remarkPluginFrontmatter.minutesRead}</span>
-	{
-		data.updatedDate && (
-			<>
-				<span class="text-borderColor">·</span>
-				<span class="text-accent">
-					Updated <FormattedDate date={data.updatedDate} dateTimeOptions={dateTimeOptions} />
-				</span>
-			</>
-		)
-	}
+		<dl class="text-textMuted grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[11px]">
+			<dt>Date created:</dt>
+			<dd><FormattedDate date={data.publishDate} dateTimeOptions={dateTimeOptions} /></dd>
+			{
+				data.updatedDate && (
+					<>
+						<dt>Date modified:</dt>
+						<dd>
+							<FormattedDate date={data.updatedDate} dateTimeOptions={dateTimeOptions} />
+						</dd>
+					</>
+				)
+			}
+			<dt>Size:</dt>
+			<dd>{remarkPluginFrontmatter.minutesRead}</dd>
+		</dl>
+	</div>
 </div>
 
 {
 	!!data.tags?.length && (
-		<div class="mt-4 flex flex-wrap gap-2">
+		<div class="mt-4 flex flex-wrap items-center gap-1.5">
+			<span class="text-textMuted text-[11px]">Tags:</span>
 			{data.tags.map((tag) => (
 				<a
-					class="inline-block rounded-full border border-borderColor px-3 py-1 text-xs text-textMuted transition-colors hover:border-accent hover:text-accent"
+					class="xp-tag"
 					aria-label={`View more blogs with the tag ${tag}`}
 					href={`/tags/${tag}/`}
 					data-pagefind-filter="tag"

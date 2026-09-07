@@ -40,20 +40,20 @@ const { headings } = await render(post);
 
 <BaseLayout meta={{ title, description, articleDate, ogImage: socialImage }}>
 	<article class="section-spacing">
-		<div class="gap-x-12 lg:flex lg:items-start">
+		<div class="gap-x-8 lg:flex lg:items-start">
 			{!!headings.length && <TOC headings={headings} />}
-			<div class="max-w-2xl grow" data-pagefind-body>
+			<div class="max-w-2xl min-w-0 grow" data-pagefind-body>
 				<div id="blog-hero"><BlogHero content={post} /></div>
-				<div class="prose prose-lg mt-12 max-w-none">
+				<div class="prose mt-8 max-w-none">
 					<slot />
 				</div>
 			</div>
 		</div>
 	</article>
-	
+
 	<button
 		id="to-top-btn"
-		class="fixed bottom-8 right-8 z-50 flex h-10 w-10 translate-y-20 items-center justify-center rounded-full border border-borderColor bg-bgColor text-textMuted opacity-0 transition-all duration-300 hover:border-textMuted hover:text-textColor data-[show=true]:translate-y-0 data-[show=true]:opacity-100"
+		class="xp-btn fixed right-4 bottom-[42px] z-50 !min-w-0 gap-1 !px-2 opacity-0 transition-opacity duration-200 data-[show=false]:pointer-events-none data-[show=true]:opacity-100"
 		aria-label="Back to Top"
 		data-show="false"
 	>
@@ -63,11 +63,12 @@ const { headings } = await render(post);
 			focusable="false"
 			fill="none"
 			viewBox="0 0 24 24"
-			stroke-width="2"
-			stroke="currentColor"
-			class="h-5 w-5"
+			stroke-width="2.5"
+			stroke="#3a8a3a"
+			class="h-3.5 w-3.5"
 		>
 			<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"></path>
 		</svg>
+		Top
 	</button>
 </BaseLayout>

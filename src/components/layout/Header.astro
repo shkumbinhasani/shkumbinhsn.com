@@ -1,97 +1,62 @@
 ---
 import ThemeToggle from "../ThemeToggle.astro";
-import { menuLinks } from "@/site-config";
+import XpIcon from "../XpIcon.astro";
+import { menuLinks, siteConfig } from "@/site-config";
 
 const url = new URL(Astro.request.url);
+const host = (Astro.site ?? url).host;
+const address = `http://${host}${url.pathname}`;
 ---
 
-<script>
-	let headerEl: HTMLElement;
-	let menuButtonEl: HTMLButtonElement;
-	let menuOpen = false;
+{/* `contents` so the sticky title bar sticks to the window, not to the header's own box. */}
+<header id="main-header" class="contents">
+	<div class="xp-titlebar">
+		<XpIcon name="window" class="h-4 w-4 shrink-0" />
+		<span class="xp-titlebar-title">{siteConfig.title} - Microsoft Internet Explorer</span>
+		<span class="flex shrink-0 items-center gap-0.5" aria-hidden="true">
+			<span class="xp-titlebar-btn"><XpIcon name="min" class="h-3 w-3" /></span>
+			<span class="xp-titlebar-btn"><XpIcon name="max" class="h-3 w-3" /></span>
+			<a href="/" class="xp-titlebar-btn is-close ml-0.5" tabindex="-1" title="Close">
+				<XpIcon name="close" class="h-3 w-3" />
+			</a>
+		</span>
+	</div>
 
-	function toggleMobileMenu() {
-		headerEl.classList.toggle("menu-open");
-		menuOpen = !menuOpen;
-		menuButtonEl.setAttribute("aria-expanded", menuOpen.toString());
-	}
-
-	document.addEventListener("DOMContentLoaded", () => {
-		headerEl = document.getElementById("main-header")!;
-		menuButtonEl = document.getElementById("toggle-navigation-menu") as HTMLButtonElement;
-		menuButtonEl.addEventListener("click", toggleMobileMenu);
-	});
-
-	document.addEventListener("astro:after-swap", () => {
-		if (menuOpen) toggleMobileMenu();
-	});
-</script>
-
-<header
-	id="main-header"
-	class="group sticky top-0 z-50 flex items-center justify-between bg-bgColor/80 py-4 backdrop-blur-sm"
-	transition:persist
->
-	<a
-		href="/"
-		class="text-lg font-semibold tracking-tight text-textColor transition-colors hover:text-accent"
-		aria-current={url.pathname === "/" ? "page" : false}
-	>
-		Shkumbin Hasani
-	</a>
-
-	<div class="flex items-center gap-6">
-		<nav
-			id="navigation-menu"
-			class="absolute left-0 right-0 top-full hidden flex-col gap-4 bg-bgColor/95 p-6 backdrop-blur-sm group-[.menu-open]:flex md:static md:flex md:flex-row md:gap-8 md:bg-transparent md:p-0 md:backdrop-blur-none"
-			aria-label="Main menu"
-		>
+	<div class="xp-menubar">
+		<nav id="navigation-menu" class="flex flex-wrap items-center" aria-label="Main menu">
 			{
-				menuLinks.map((link) => (
-					<a
-						href={link.path}
-						class="text-sm text-textMuted transition-colors hover:text-textColor"
-						aria-current={url.pathname === link.path ? "page" : false}
-						data-astro-prefetch
-					>
-						{link.title}
-					</a>
-				))
+				menuLinks.map((link) => {
+					const isActive =
+						url.pathname === link.path || (link.path !== "/" && url.pathname.startsWith(link.path));
+					return (
+						<a
+							href={link.path}
+							class="xp-menu-item"
+							aria-current={isActive ? "page" : "false"}
+							data-astro-prefetch
+						>
+							{link.title}
+						</a>
+					);
+				})
 			}
+			<a href="/rss.xml" class="xp-menu-item">RSS</a>
 		</nav>
+		<div class="ml-auto flex items-center">
+			<ThemeToggle />
+		</div>
+	</div>
 
-		<ThemeToggle />
-
-		<button
-			id="toggle-navigation-menu"
-			class="relative h-6 w-6 md:hidden"
-			type="button"
-			aria-label="Open main menu"
-			aria-expanded="false"
-			aria-haspopup="menu"
-		>
-			<svg
-				class="absolute inset-0 transition-all group-[.menu-open]:scale-0 group-[.menu-open]:opacity-0"
-				aria-hidden="true"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5"></path>
-			</svg>
-			<svg
-				class="absolute inset-0 scale-0 opacity-0 transition-all group-[.menu-open]:scale-100 group-[.menu-open]:opacity-100"
-				aria-hidden="true"
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-			</svg>
-		</button>
+	<div class="xp-toolbar">
+		<span class="xp-toolbar-grip" aria-hidden="true"></span>
+		<span class="hidden sm:inline">Address</span>
+		<span class="xp-textbox" aria-label="Current address">
+			<XpIcon name="page" class="h-4 w-4 shrink-0" />
+			<span class="truncate">{address}</span>
+		</span>
+		<a href={url.pathname} class="xp-btn xp-btn-sm gap-1" aria-label="Reload this page">
+			<XpIcon name="arrow" class="h-4 w-4" />
+			Go
+		</a>
 	</div>
 </header>

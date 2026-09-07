@@ -1,7 +1,7 @@
 {
-	"name": "Astro Theme Cactus Demo",
-	"short_name": "Astro_Cactus",
-	"description": "Starter blog site for Astro",
+	"name": "Shkumbin Hasani",
+	"short_name": "Shkumbin",
+	"description": "A personal blog by Shkumbin Hasani",
 	"icons": [
 		{
 			"src": "/192x192.png",
@@ -15,7 +15,7 @@
 		}
 	],
 	"start_url": "/",
-	"background_color": "#1d1f21",
-	"theme_color": "#2bbc8a",
+	"background_color": "#3a6ea5",
+	"theme_color": "#0050ee",
 	"display": "standalone"
 }

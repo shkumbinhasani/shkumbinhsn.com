@@ -13,9 +13,18 @@ const { headings } = Astro.props;
 const toc = generateToc(headings);
 ---
 
-<aside class="sticky top-24 order-2 -me-32 hidden basis-64 lg:block">
-	<h2 class="mb-4 text-sm font-medium text-textMuted">On this page</h2>
-	<ul class="space-y-2 text-sm">
-		{toc.map((heading) => <TOCHeading heading={heading} />)}
-	</ul>
-</aside>
+{
+	/* Posts written with h1 section headings produce no h2 entries; skip the empty pane. */
+	toc.length > 0 && (
+		<aside class="xp-pane-strip sticky top-12 order-2 mb-6 hidden w-56 shrink-0 self-start lg:mb-0 lg:block">
+			<section class="xp-pane">
+				<h2 class="xp-pane-head">On this page</h2>
+				<ul class="xp-pane-body space-y-1">
+					{toc.map((heading) => (
+						<TOCHeading heading={heading} />
+					))}
+				</ul>
+			</section>
+		</aside>
+	)
+}

@@ -10,12 +10,8 @@ const {
 } = Astro.props;
 ---
 
-<li class={depth > 2 ? "ml-4" : ""}>
-	<a
-		class="block py-1 text-textMuted transition-colors hover:text-textColor line-clamp-2"
-		href={`#${slug}`}
-		aria-label={`Scroll to section: ${text}`}
-	>
+<li class={depth > 2 ? "ml-3" : ""}>
+	<a class="line-clamp-2 block py-0.5" href={`#${slug}`} aria-label={`Scroll to section: ${text}`}>
 		{text}
 	</a>
 	{

@@ -1,0 +1,57 @@
+---
+import { Icon } from "astro-icon/components";
+import XpIcon from "../XpIcon.astro";
+import { siteConfig } from "@/site-config";
+
+const socialLinks = [
+	{ name: "GitHub", icon: "mdi:github", href: "https://github.com/shkumbinhasani" },
+	{
+		name: "LinkedIn",
+		icon: "mdi:linkedin",
+		href: "https://www.linkedin.com/in/shkumbin-hasani-a2a812198/",
+	},
+	{ name: "Email", icon: "mdi:email", href: "mailto:contact@shkumbinhsn.com" },
+];
+---
+
+<script>
+	function tick() {
+		const el = document.getElementById("xp-clock");
+		if (!el) return;
+		el.textContent = new Date()
+			.toLocaleTimeString("en-GB", {
+				hour: "numeric",
+				minute: "2-digit",
+				hour12: true,
+			})
+			.toUpperCase();
+	}
+	tick();
+	setInterval(tick, 10_000);
+</script>
+
+<div class="xp-taskbar" role="contentinfo">
+	<a href="/" class="xp-start" data-astro-prefetch>
+		<span>start</span>
+	</a>
+	<a href="#main" class="xp-task hidden sm:flex" title={siteConfig.title}>
+		<XpIcon name="window" class="h-4 w-4 shrink-0" />
+		<span class="truncate">{siteConfig.title}</span>
+	</a>
+	<nav class="xp-tray" aria-label="Social links">
+		{
+			socialLinks.map((link) => (
+				<a
+					href={link.href}
+					title={link.name}
+					target={link.href.startsWith("mailto") ? undefined : "_blank"}
+					rel={link.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+				>
+					<Icon name={link.icon} class="h-4 w-4" aria-hidden="true" />
+					<span class="sr-only">{link.name}</span>
+				</a>
+			))
+		}
+		<time id="xp-clock" class="xp-clock" aria-label="Current time"></time>
+	</nav>
+</div>

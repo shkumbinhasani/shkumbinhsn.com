@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import PageLayout from "@/layouts/Base";
+import PostPreview from "@/components/blog/PostPreview";
+import XpIcon from "@/components/XpIcon";
 import { sortMDByDate } from "@/utils";
 
 const MAX_POSTS = 4;
@@ -26,92 +28,123 @@ const companies = ["Pluto Labs LLC"];
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-	<!-- Hero Section - Above the fold -->
-	<section class="flex min-h-[70vh] flex-col justify-center py-12">
-		<p class="mb-4 text-sm font-medium text-accent">Software Engineer</p>
-		<h1 class="mb-6 text-4xl font-semibold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-			I build software that <br />
-			<span class="text-textMuted">works and scales.</span>
-		</h1>
-		<p class="mb-8 max-w-xl text-lg text-textMuted">
-			Full-stack engineer based in Kosovo with 9+ years of experience turning ideas into production-ready applications.
-		</p>
-		<div class="flex flex-wrap gap-4">
-			<a href="mailto:contact@shkumbinhsn.com" class="btn-primary">
-				Get in touch
-			</a>
-			<a href="/posts/" class="btn-secondary">
-				Read my writing
-			</a>
-		</div>
-	</section>
+	<div class="grid gap-6 py-4 lg:grid-cols-[220px_1fr] lg:gap-8">
+		<!-- Explorer-style task pane -->
+		<aside class="xp-pane-strip order-2 self-start lg:sticky lg:top-12 lg:order-1">
+			<section class="xp-pane">
+				<h2 class="xp-pane-head">System Tasks</h2>
+				<ul class="xp-pane-body space-y-1.5">
+					<li class="flex items-center gap-1.5">
+						<XpIcon name="email" class="h-4 w-4" />
+						<a href="mailto:contact@shkumbinhsn.com">Get in touch</a>
+					</li>
+					<li class="flex items-center gap-1.5">
+						<XpIcon name="folder" class="h-4 w-4" />
+						<a href="/posts/" data-astro-prefetch>Read my writing</a>
+					</li>
+					<li class="flex items-center gap-1.5">
+						<XpIcon name="user" class="h-4 w-4" />
+						<a href="/about/" data-astro-prefetch>About me</a>
+					</li>
+				</ul>
+			</section>
 
-	<!-- Social Proof -->
-	<section class="border-y border-borderColor py-8">
-		<p class="text-sm text-textMuted">
-			Currently building at <span class="font-medium text-textColor">{companies[0]}</span>
-		</p>
-	</section>
-
-	<!-- Value Props - 3 cards max -->
-	<section class="section-spacing">
-		<h2 class="mb-12 text-2xl font-semibold">What I do</h2>
-		<div class="grid gap-8 md:grid-cols-3">
-			{
-				expertise.map(({ title, description }) => (
-					<div class="space-y-3">
-						<h3 class="font-medium text-textColor">{title}</h3>
-						<p class="text-sm text-textMuted">{description}</p>
+			<section class="xp-pane">
+				<h2 class="xp-pane-head">Details</h2>
+				<dl class="xp-pane-body space-y-1">
+					<div>
+						<dt class="font-bold">Shkumbin Hasani</dt>
+						<dd>Principal Engineer</dd>
 					</div>
-				))
-			}
-		</div>
-	</section>
+					<div>
+						<dt class="font-bold">Location</dt>
+						<dd>Kosovo</dd>
+					</div>
+					<div>
+						<dt class="font-bold">Experience</dt>
+						<dd>9+ years</dd>
+					</div>
+					<div>
+						<dt class="font-bold">Working at</dt>
+						<dd>
+							ANON Labs AI, building{" "}
+							<a href="https://serus.ai" target="_blank" rel="noopener noreferrer">Serus.ai</a>
+						</dd>
+					</div>
+					<div>
+						<dt class="font-bold">Founder of</dt>
+						<dd><a href="https://plutolaboratories.com">Pluto Labs</a></dd>
+					</div>
+				</dl>
+			</section>
+		</aside>
 
-	<!-- Recent Writing -->
-	<section class="section-spacing border-t border-borderColor">
-		<div class="mb-12 flex items-center justify-between">
-			<h2 class="text-2xl font-semibold">Recent writing</h2>
-			<a href="/posts/" class="text-sm text-textMuted transition-colors hover:text-accent">
-				View all
-			</a>
-		</div>
-		<div class="space-y-8">
-			{
-				allPostsByDate.map((post) => (
-					<article class="group">
-						<a href={`/posts/${post.id}/`} class="block">
-							<h3 class="mb-2 font-medium text-textColor transition-colors group-hover:text-accent">
-								{post.data.title}
-							</h3>
-							<p class="mb-2 text-sm text-textMuted line-clamp-2">
-								{post.data.description}
-							</p>
-							<time class="text-xs text-textMuted">
-								{new Date(post.data.publishDate).toLocaleDateString("en-GB", {
-									day: "numeric",
-									month: "short",
-									year: "numeric",
-								})}
-							</time>
-						</a>
-					</article>
-				))
-			}
-		</div>
-	</section>
+		<div class="order-1 space-y-8 lg:order-2">
+			<!-- Hero -->
+			<section class="pt-2">
+				<h1 class="mb-3 text-2xl leading-tight font-bold md:text-4xl">
+					I build software that <br />
+					<span class="text-textMuted">works and scales.</span>
+				</h1>
+				<p class="text-textMuted mb-5 max-w-xl text-sm md:text-base">
+					Principal Engineer at ANON Labs AI, building{" "}
+					<a href="https://serus.ai" class="xp-link" target="_blank" rel="noopener noreferrer"
+						>Serus.ai</a
+					>. Founder of{" "}
+					<a
+						href="https://plutolaboratories.com"
+						class="xp-link"
+						target="_blank"
+						rel="noopener noreferrer">Pluto Labs</a
+					>, where I ship side projects and help others ship theirs.
+				</p>
+				<div class="flex flex-wrap items-center gap-2">
+					<a href="mailto:contact@shkumbinhsn.com" class="btn-primary">Get in touch</a>
+					<a href="/posts/" class="btn-secondary">Read my writing</a>
+				</div>
+				<div class="mt-6">
+					<p class="xp-balloon">
+						<strong>Tip:</strong> Usually reply within 24 hours.
+					</p>
+				</div>
+			</section>
 
-	<!-- Final CTA -->
-	<section class="section-spacing border-t border-borderColor text-center">
-		<h2 class="mb-4 text-2xl font-semibold">Let's work together</h2>
-		<p class="mb-8 text-textMuted">
-			Have a project in mind? I'd love to hear about it.
-		</p>
-		<a href="mailto:contact@shkumbinhsn.com" class="btn-primary">
-			Get in touch
-		</a>
-		<p class="mt-4 text-xs text-textMuted">
-			Usually reply within 24 hours.
-		</p>
-	</section>
+			<!-- What I do -->
+			<section class="xp-group">
+				<h2 class="xp-group-title">What I do</h2>
+				<div class="grid gap-3 md:grid-cols-3">
+					{
+						expertise.map(({ title, description }) => (
+							<div class="xp-pane">
+								<h3 class="xp-pane-head">{title}</h3>
+								<p class="xp-pane-body text-textColor">{description}</p>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- Recent writing -->
+			<section class="xp-group">
+				<h2 class="xp-group-title">Recent writing</h2>
+				<ul class="-mx-2 space-y-1">
+					{
+						allPostsByDate.map((post) => (
+							<li>
+								<PostPreview post={post} as="h3" withDesc />
+							</li>
+						))
+					}
+				</ul>
+				<a
+					href="/posts/"
+					class="xp-link mt-3 inline-flex items-center gap-1 text-[11px]"
+					data-astro-prefetch
+				>
+					<XpIcon name="folder" class="h-4 w-4" />
+					View all posts
+				</a>
+			</section>
+		</div>
+	</div>
 </PageLayout>
